@@ -12,6 +12,15 @@ class ItemsController < ApplicationController
         render json: item.to_json(except: [:created_at, :updated_at], include: {category: {only: [:name]}})
     end
 
+    def update
+        item = Item.find(params[:id])
+        if item.update(item_params) 
+            render json: ItemSerializer.new(item)
+        else
+            render json: {error: "could not update"}
+        end
+    end
+
     def create 
         item = Item.new(item_params)
         item.category = Category.last  ## NEEDS TO CHANGE!!!!
